@@ -10,9 +10,10 @@ class Ground {
   }
   
   public void show() {
+    fill(255);
     pushMatrix();
     translate(x, y, z);
-    box(l, w, h);
+    box(l, h, w);
     popMatrix();
   }
 }
