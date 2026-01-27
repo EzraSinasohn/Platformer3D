@@ -8,12 +8,13 @@ void setup() {
 }
 
 void draw() {
-  background(50);
+  background(100, 200, 250);
   for(int i = 0; i < ground.size(); i++) {
     ground.get(i).show();
   }
   me.move();
   me.show();
+  me.boundingBox();
   moveCam();
   fill(0);
   text(camRY, 0, -80);
