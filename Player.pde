@@ -1,7 +1,6 @@
 public boolean[] keys = new boolean[8];
-public float rotation;
 class Player {
-  float x, y, z, l, w, h;
+  float x, y, z, l, w, h, rotation, vx, vy, vz, vxs, vxc, vzs, vzc;
   public Player(float xPos, float yPos, float zPos, float myLength, float myWidth, float myHeight) {
     x = xPos;
     y = yPos;
@@ -23,38 +22,66 @@ class Player {
   
   public void move() {
     if(keys[4]) {
-      rotation = camRX;
-      x += cos(camRX)*1;
-      z += sin(camRX)*1;
+      rotation = camRX+PI;
+      vxc = cos(camRX)*1;
+      vzs = sin(camRX)*1;
     } if(keys[5]) {
       rotation = camRX;
-      x -= cos(camRX)*1;
-      z -= sin(camRX)*1;
+      vxc = -cos(camRX)*1;
+      vzs = -sin(camRX)*1;
     } if(keys[6]) {
-      rotation = camRX;
-      x += sin(camRX)*1;
-      z -= cos(camRX)*1;
+      rotation = camRX+PI/2;
+      vxs = sin(camRX)*1;
+      vzc = -cos(camRX)*1;
     } if(keys[7]) {
-      rotation = camRX;
-      x -= sin(camRX)*1;
-      z += cos(camRX)*1;
+      rotation = camRX-PI/2;
+      vxs = -sin(camRX)*1;
+      vzc = cos(camRX)*1;
+    }
+    vx = vxs + vxc;
+    vz = vzs + vzc;
+    x += vx;
+    z += vz;
+    if(!moveKeys()) {
+      vxs *= 0.9;
+      vxc *= 0.9;
+      vzs *= 0.9;
+      vzc *= 0.9;
     }
   }
   
+  public void boundingBox() {
+    fill(0, 255, 0);
+    pushMatrix();
+    translate(x, y, z);
+    rotateY(-rotation);
+    translate(-l/2, -h/2, -w/2);
+    rect(0, 0, l, h);
+    popMatrix();
+    pushMatrix();
+    noStroke();
+    translate(x-l*cos(rotation)/2, y-h/2, z-w*sin(rotation)/2);
+    sphere(1);
+    stroke(0);
+    popMatrix();
+  }
+  
   public void collision() {
-    
+    for(int i = 0; i < ground.size(); i++) {
+      
+    }
   }
 }
 
 public void moveCam() {
   if(keys[0] && camRY < 1.5) {
-    camRY += 0.1;
+    camRY += 0.05;
   } if(keys[1] && camRY > -1.5) {
-    camRY -= 0.1;
+    camRY -= 0.05;
   } if(keys[2]) {
-    camRX += 0.1;
+    camRX += 0.05;
   } if(keys[3]) {
-    camRX -= 0.1;
+    camRX -= 0.05;
   }
   camX = cos(camRX)*cos(camRY)*100;
   camY = sin(camRY)*100;
@@ -65,19 +92,19 @@ public void moveCam() {
 public void keyPressed() {
   if(key == 'a') {
     keys[7] = true;
-  } else if(key == 'd') {
+  } if(key == 'd') {
     keys[6] = true;
-  } else if(key == 'w') {
+  } if(key == 'w') {
     keys[5] = true;
-  } else if(key == 's') {
+  } if(key == 's') {
     keys[4] = true;
-  } else if(keyCode == LEFT) {
+  } if(keyCode == LEFT) {
     keys[3] = true;
-  } else if(keyCode == RIGHT) {
+  } if(keyCode == RIGHT) {
     keys[2] = true;
-  } else if(keyCode == UP) {
+  } if(keyCode == UP) {
     keys[1] = true;
-  } else if(keyCode == DOWN) {
+  } if(keyCode == DOWN) {
     keys[0] = true;
   }
 }
@@ -85,19 +112,21 @@ public void keyPressed() {
 public void keyReleased() {
   if(key == 'a') {
     keys[7] = false;
-  } else if(key == 'd') {
+  } if(key == 'd') {
     keys[6] = false;
-  } else if(key == 'w') {
+  } if(key == 'w') {
     keys[5] = false;
-  } else if(key == 's') {
+  } if(key == 's') {
     keys[4] = false;
-  } else if(keyCode == LEFT) {
+  } if(keyCode == LEFT) {
     keys[3] = false;
-  } else if(keyCode == RIGHT) {
+  } if(keyCode == RIGHT) {
     keys[2] = false;
-  } else if(keyCode == UP) {
+  } if(keyCode == UP) {
     keys[1] = false;
-  } else if(keyCode == DOWN) {
+  } if(keyCode == DOWN) {
     keys[0] = false;
   }
 }
+
+public boolean moveKeys() {return keys[4] || keys[5] || keys[6] || keys[7];}
