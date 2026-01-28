@@ -42,28 +42,52 @@ class Player {
     vz = vzs + vzc;
     x += vx;
     z += vz;
-    if(!moveKeys()) {
-      vxs *= 0.9;
-      vxc *= 0.9;
-      vzs *= 0.9;
-      vzc *= 0.9;
-    }
+    if(!(keys[6] || keys[7])) {vxs *= 0.9;}
+    if(!(keys[4] || keys[5])) {vxc *= 0.9;}
+    if(!(keys[4] || keys[5])) {vzs *= 0.9;}
+    if(!(keys[6] || keys[7])) {vzc *= 0.9;}
   }
   
-  public void boundingBox() {
-    fill(0, 255, 0);
+  public float[][][] boundingBox() {
+    float[][] u = {{x+l/2, y-h/2, z+w/2}, {x-l/2, y-h/2, z+w/2}, {x+l/2, y-h/2, z-w/2}, {x-l/2, y-h/2, z-w/2}};
+    float[][] d = {{x+l/2, y+h/2, z+w/2}, {x-l/2, y+h/2, z+w/2}, {x+l/2, y+h/2, z-w/2}, {x-l/2, y+h/2, z-w/2}};
+    float[][] lt = {{x+l/2, y+h/2, z+w/2}, {x-l/2, y+h/2, z+w/2}, {x+l/2, y-h/2, z+w/2}, {x-l/2, y-h/2, z+w/2}};
+    float[][] rt = {{x+l/2, y+h/2, z-w/2}, {x-l/2, y+h/2, z-w/2}, {x+l/2, y-h/2, z-w/2}, {x-l/2, y-h/2, z-w/2}};
+    float[][] f = {{x+l/2, y+h/2, z+w/2}, {x+l/2, y+h/2, z-w/2}, {x+l/2, y-h/2, z+w/2}, {x+l/2, y-h/2, z-w/2}};
+    float[][] b = {{x-l/2, y+h/2, z+w/2}, {x-l/2, y+h/2, z-w/2}, {x-l/2, y-h/2, z+w/2}, {x-l/2, y-h/2, z-w/2}};
+    float[][][] box = {u, d, lt, rt, f, b};
+    fill(0, 255, 0, 50);
     pushMatrix();
-    translate(x, y, z);
-    rotateY(-rotation);
-    translate(-l/2, -h/2, -w/2);
-    rect(0, 0, l, h);
+    translate(0, box[0][0][1], 0);
+    rotateX(PI/2);
+    rect(box[0][0][0], box[0][0][2], box[0][3][0], box[0][3][2]);
     popMatrix();
     pushMatrix();
-    noStroke();
-    translate(x-l*cos(rotation)/2, y-h/2, z-w*sin(rotation)/2);
-    sphere(1);
-    stroke(0);
+    translate(0, box[1][0][1], 0);
+    rotateX(PI/2);
+    rect(box[1][0][0], box[1][0][2], box[1][3][0], box[1][3][2]);
     popMatrix();
+    pushMatrix();
+    translate(0, 0, box[2][0][2]);
+    rect(box[2][0][0], box[2][0][1], box[2][3][0], box[2][3][1]);
+    popMatrix();
+    pushMatrix();
+    translate(0, 0, box[3][0][2]);
+    rect(box[3][0][0], box[3][0][1], box[3][3][0], box[3][3][1]);
+    popMatrix();
+    pushMatrix();
+    translate(box[4][0][0], 0, 0);
+    rotateZ(PI/2);
+    rotateX(PI/2);
+    rect(box[5][0][1], box[5][0][2], box[5][3][1], box[5][3][2]);
+    popMatrix();
+    pushMatrix();
+    translate(box[5][0][0], 0, 0);
+    rotateZ(PI/2);
+    rotateX(PI/2);
+    rect(box[5][0][1], box[5][0][2], box[5][3][1], box[5][3][2]);
+    popMatrix();
+    return box;
   }
   
   public void collision() {
