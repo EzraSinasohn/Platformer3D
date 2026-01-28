@@ -5,6 +5,7 @@ void setup() {
   size(800, 800, P3D);
   ground.add(new Ground(0, 0, 0, 25, 25, 25));
   lights();
+  rectMode(CORNERS);
 }
 
 void draw() {
