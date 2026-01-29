@@ -17,6 +17,8 @@ void draw() {
   me.show();
   me.boundingBox();
   moveCam();
+  camera(me.x+camX, me.y+camY, me.z+camZ, me.x, me.y, me.z, 0, 1, 0);
   fill(0);
   text(camRY, 0, -80);
 }
+
