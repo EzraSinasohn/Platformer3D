@@ -90,11 +90,16 @@ class Player {
     return box;
   }
   
-  public void collision() {
-    for(int i = 0; i < ground.size(); i++) {
-      
-    }
+  public void collision(Ground obj) {
+    
   }
+  
+  public float[][] up() {return boundingBox()[0];}
+  public float[][] down() {return boundingBox()[1];}
+  public float[][] left() {return boundingBox()[2];}
+  public float[][] right() {return boundingBox()[3];}
+  public float[][] front() {return boundingBox()[4];}
+  public float[][] back() {return boundingBox()[5];}
 }
 
 public void moveCam() {
@@ -110,7 +115,7 @@ public void moveCam() {
   camX = cos(camRX)*cos(camRY)*100;
   camY = sin(camRY)*100;
   camZ = sin(camRX)*cos(camRY)*100;
-  //camera(me.x+camX, me.y+camY, me.z+camZ, me.x, me.y, me.z, 0, 1, 0);
+  camera(me.x+camX, me.y+camY, me.z+camZ, me.x, me.y, me.z, 0, 1, 0);
 }
 
 public void keyPressed() {
@@ -154,5 +159,3 @@ public void keyReleased() {
 }
 
 public boolean moveKeys() {return keys[4] || keys[5] || keys[6] || keys[7];}
-
-
