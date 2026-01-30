@@ -107,10 +107,10 @@ public void moveCam() {
   } if(keys[3]) {
     camRX -= 0.05;
   }
-  camX = cos(camRX)*cos(camRY)*10;
-  camY = sin(camRY)*10;
-  camZ = sin(camRX)*cos(camRY)*10;
-  camera(me.x+camX, me.y+camY, me.z+camZ, me.x, me.y, me.z, 0, 1, 0);
+  camX = cos(camRX)*cos(camRY)*100;
+  camY = sin(camRY)*100;
+  camZ = sin(camRX)*cos(camRY)*100;
+  //camera(me.x+camX, me.y+camY, me.z+camZ, me.x, me.y, me.z, 0, 1, 0);
 }
 
 public void keyPressed() {
@@ -154,4 +154,5 @@ public void keyReleased() {
 }
 
 public boolean moveKeys() {return keys[4] || keys[5] || keys[6] || keys[7];}
+
 
