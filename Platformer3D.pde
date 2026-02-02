@@ -15,8 +15,11 @@ void draw() {
   }
   me.move();
   me.show();
-  me.boundingBox();
+  for(int i = 0; i < ground.size(); i++) {
+    me.collision(ground.get(i));
+  }
   moveCam();
   fill(0);
   text(camRY, 0, -80);
+  me.collision(ground.get(0));
 }
