@@ -21,7 +21,9 @@ void draw() {
   fill(0);
   text(camRY, 0, -80);
   me.collision(ground.get(0));
+  box(50, 50, 50);
 }
+
 
 
 
