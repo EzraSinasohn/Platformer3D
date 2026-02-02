@@ -91,7 +91,24 @@ class Player {
   }
   
   public void collision(Ground obj) {
-    
+    text(sides(obj)[0], -100, 0, -20);
+    text(sides(obj)[1], -20, 0, -20);
+    text(sides(obj)[2], 60, 0, -20);
+    text(sides(obj)[3], 140, 0, -20);
+    text(sides(obj)[4], 220, 0, -20);
+    text(sides(obj)[5], 300, 0, -20);
+  }
+  
+  /*public void footCollision(Ground obj) {
+    boolean corner = false;
+    if(((down()[0][0] < obj.up()[0][0] && down()[3][0] < obj.up()[3][0]+l/2 && down()[0][2] < obj.up()[0][2] && down()[3][2] < obj.up()[3][2]+w/2))) {
+      
+    }
+  }*/
+  
+  public float[] sides(Ground obj) {
+    float[] dim = {y-h/2-(obj.y+obj.h/2), -y+h/2+(obj.y-obj.h/2), x-l/2-(obj.x+obj.l/2), -x+l/2+(obj.x-obj.l/2), z-w/2-(obj.z+obj.w/2), -z+w/2+(obj.z-obj.w/2)};
+    return dim;
   }
   
   public float[][] up() {return boundingBox()[0];}
