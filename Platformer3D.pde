@@ -4,7 +4,6 @@ Player me = new Player(0, -25, 0, 10, 10, 20);
 void setup() {
   size(800, 800, P3D);
   ground.add(new Ground(0, 0, 0, 25, 25, 25));
-  lights();
   rectMode(CORNERS);
 }
 
@@ -23,3 +22,4 @@ void draw() {
   text(camRY, 0, -80);
   me.collision(ground.get(0));
 }
+
