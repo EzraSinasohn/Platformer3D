@@ -13,7 +13,7 @@ class Player {
   public void show() {
     pushMatrix();
     fill(255, 0, 0);
-    translate(x, y, z);
+    translate(x, y, 0);
     rotateY(-rotation);
     box(l, h, w);
     translate(0, 0, w+1);
@@ -176,3 +176,4 @@ public void keyReleased() {
 }
 
 public boolean moveKeys() {return keys[4] || keys[5] || keys[6] || keys[7];}
+
