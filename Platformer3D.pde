@@ -17,12 +17,13 @@ void draw() {
   for(int i = 0; i < ground.size(); i++) {
     me.collision(ground.get(i));
   }
-  moveCam();
+  //moveCam();
   fill(0);
   text(camRY, 0, -80);
   me.collision(ground.get(0));
   box(50, 50, 50);
 }
+
 
 
 
