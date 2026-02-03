@@ -13,7 +13,7 @@ void draw() {
     ground.get(i).show();
   }
   me.move();
-  me.show();
+  //me.show();
   for(int i = 0; i < ground.size(); i++) {
     me.collision(ground.get(i));
   }
@@ -30,6 +30,7 @@ void draw() {
   box(me.l, me.h, me.w);
   popMatrix();
 }
+
 
 
 
