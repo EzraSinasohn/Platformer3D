@@ -1,7 +1,7 @@
 public boolean[] keys = new boolean[9];
 class Player {
   float x, y, z, l, w, h, rotation, vx, vy, vz, vxs, vxc, vzs, vzc;
-  boolean jump = false;
+  boolean jump = false, gravity = true;
   public Player(float xPos, float yPos, float zPos, float myLength, float myWidth, float myHeight) {
     x = xPos;
     y = yPos;
@@ -24,7 +24,7 @@ class Player {
   public void move() {
     if(keys[8] && jump) {
       jump = false;
-      vy = -8;
+      vy = -5;
     } if(keys[4]) {
       rotation = camRX+PI;
       vxc = cos(camRX)*1;
@@ -52,7 +52,8 @@ class Player {
     if(!(keys[4] || keys[5])) {vzs *= 0.9;}
     if(!(keys[6] || keys[7])) {vzc *= 0.9;}
     show();
-    if(vy < 1) {vy += 1;}
+    if(vy < 4 && gravity) {vy += 0.3;}
+    gravity = true;
   }
   
   public float[][][] boundingBox() {
@@ -103,7 +104,9 @@ class Player {
         y = obj.y+obj.h/2+h/2;
       } else if(sides(obj)[1] > sides(obj)[0] && sides(obj)[1] > sides(obj)[2] && sides(obj)[1] > sides(obj)[3] && sides(obj)[1] > sides(obj)[4] && sides(obj)[1] > sides(obj)[5]) { 
         jump = true;
+        gravity = false;
         y = obj.y-obj.h/2-h/2;
+        vy -= vy;
       } else if(sides(obj)[2] > sides(obj)[0] && sides(obj)[2] > sides(obj)[1] && sides(obj)[2] > sides(obj)[3] && sides(obj)[2] > sides(obj)[4] && sides(obj)[2] > sides(obj)[5]) { 
         x = obj.x+obj.l/2+l/2;
       } else if(sides(obj)[3] > sides(obj)[0] && sides(obj)[3] > sides(obj)[1] && sides(obj)[3] > sides(obj)[2] && sides(obj)[3] > sides(obj)[4] && sides(obj)[3] > sides(obj)[5]) { 
@@ -149,6 +152,7 @@ public void moveCam() {
   camX = cos(camRX)*cos(camRY)*100;
   camY = sin(camRY)*100;
   camZ = sin(camRX)*cos(camRY)*100;
+  camVY += (me.y+camY-camVY)/30;
   camera(me.x+camX, me.y+camY, me.z+camZ, me.x, me.y, me.z, 0, 1, 0);
 }
 
@@ -197,5 +201,4 @@ public void keyReleased() {
 }
 
 public boolean moveKeys() {return keys[4] || keys[5] || keys[6] || keys[7];}
-
 
