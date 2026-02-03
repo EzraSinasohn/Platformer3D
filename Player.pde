@@ -46,6 +46,7 @@ class Player {
     if(!(keys[4] || keys[5])) {vxc *= 0.9;}
     if(!(keys[4] || keys[5])) {vzs *= 0.9;}
     if(!(keys[6] || keys[7])) {vzc *= 0.9;}
+    show();
   }
   
   public float[][][] boundingBox() {
@@ -176,5 +177,6 @@ public void keyReleased() {
 }
 
 public boolean moveKeys() {return keys[4] || keys[5] || keys[6] || keys[7];}
+
 
 
