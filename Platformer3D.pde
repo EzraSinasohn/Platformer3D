@@ -20,14 +20,17 @@ void draw() {
   moveCam();
   fill(0);
   text(camRY, 0, -80);
-  //me.collision(ground.get(0));
+  me.collision(ground.get(0));
+  fill(255);
   box(50, 50, 50);
+  fill(255, 0, 0);
   pushMatrix();
   translate(me.x, me.y, me.z);
   rotateY(-me.rotation);
   box(me.l, me.h, me.w);
   popMatrix();
 }
+
 
 
 
