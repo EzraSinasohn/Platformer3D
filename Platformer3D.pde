@@ -22,7 +22,13 @@ void draw() {
   text(camRY, 0, -80);
   me.collision(ground.get(0));
   box(50, 50, 50);
+  pushMatrix();
+  translate(me.x, me.y, me.z);
+  rotateY(-me.rotation);
+  box(me.l, me.h, me.w);
+  popMatrix();
 }
+
 
 
 
