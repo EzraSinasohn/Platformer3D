@@ -1,6 +1,7 @@
-public boolean[] keys = new boolean[8];
+public boolean[] keys = new boolean[9];
 class Player {
   float x, y, z, l, w, h, rotation, vx, vy, vz, vxs, vxc, vzs, vzc;
+  boolean jump = false;
   public Player(float xPos, float yPos, float zPos, float myLength, float myWidth, float myHeight) {
     x = xPos;
     y = yPos;
@@ -21,7 +22,10 @@ class Player {
   }
   
   public void move() {
-    if(keys[4]) {
+    if(keys[8] && jump) {
+      jump = false;
+      vy = -8;
+    } if(keys[4]) {
       rotation = camRX+PI;
       vxc = cos(camRX)*1;
       vzs = sin(camRX)*1;
@@ -41,12 +45,14 @@ class Player {
     vx = vxs + vxc;
     vz = vzs + vzc;
     x += vx;
+    y += vy;
     z += vz;
     if(!(keys[6] || keys[7])) {vxs *= 0.9;}
     if(!(keys[4] || keys[5])) {vxc *= 0.9;}
     if(!(keys[4] || keys[5])) {vzs *= 0.9;}
     if(!(keys[6] || keys[7])) {vzc *= 0.9;}
     show();
+    if(vy < 1) {vy += 1;}
   }
   
   public float[][][] boundingBox() {
@@ -92,12 +98,22 @@ class Player {
   }
   
   public void collision(Ground obj) {
-    text(sides(obj)[0], -100, 0, -20);
-    text(sides(obj)[1], -20, 0, -20);
-    text(sides(obj)[2], 60, 0, -20);
-    text(sides(obj)[3], 140, 0, -20);
-    text(sides(obj)[4], 220, 0, -20);
-    text(sides(obj)[5], 300, 0, -20);
+    if(((sides(obj)[0] < 0 && sides(obj)[1] < h) || (sides(obj)[0] < 0 && sides(obj)[1] < 0)) && ((sides(obj)[2] < 0 && sides(obj)[3] < l) || (sides(obj)[2] < 0 && sides(obj)[3] < 0)) && ((sides(obj)[4] < 0 && sides(obj)[5] < w) || (sides(obj)[4] < 0 && sides(obj)[5] < 0))) {
+      if(sides(obj)[0] > sides(obj)[1] && sides(obj)[0] > sides(obj)[2] && sides(obj)[0] > sides(obj)[3] && sides(obj)[0] > sides(obj)[4] && sides(obj)[0] > sides(obj)[5]) { 
+        y = obj.y+obj.h/2+h/2;
+      } else if(sides(obj)[1] > sides(obj)[0] && sides(obj)[1] > sides(obj)[2] && sides(obj)[1] > sides(obj)[3] && sides(obj)[1] > sides(obj)[4] && sides(obj)[1] > sides(obj)[5]) { 
+        jump = true;
+        y = obj.y-obj.h/2-h/2;
+      } else if(sides(obj)[2] > sides(obj)[0] && sides(obj)[2] > sides(obj)[1] && sides(obj)[2] > sides(obj)[3] && sides(obj)[2] > sides(obj)[4] && sides(obj)[2] > sides(obj)[5]) { 
+        x = obj.x+obj.l/2+l/2;
+      } else if(sides(obj)[3] > sides(obj)[0] && sides(obj)[3] > sides(obj)[1] && sides(obj)[3] > sides(obj)[2] && sides(obj)[3] > sides(obj)[4] && sides(obj)[3] > sides(obj)[5]) { 
+        x = obj.x-obj.l/2-l/2;
+      } else if(sides(obj)[4] > sides(obj)[0] && sides(obj)[4] > sides(obj)[1] && sides(obj)[4] > sides(obj)[2] && sides(obj)[4] > sides(obj)[3] && sides(obj)[4] > sides(obj)[5]) { 
+        z = obj.z+obj.w/2+w/2;
+      } else if(sides(obj)[5] > sides(obj)[0] && sides(obj)[5] > sides(obj)[1] && sides(obj)[5] > sides(obj)[2] && sides(obj)[5] > sides(obj)[3] && sides(obj)[5] > sides(obj)[4]) { 
+        z = obj.z-obj.w/2-w/2;
+      }
+    }
   }
   
   /*public void footCollision(Ground obj) {
@@ -137,7 +153,9 @@ public void moveCam() {
 }
 
 public void keyPressed() {
-  if(key == 'a') {
+  if(key == ' ') {
+    keys[8] = true;
+  } if(key == 'a') {
     keys[7] = true;
   } if(key == 'd') {
     keys[6] = true;
@@ -157,7 +175,9 @@ public void keyPressed() {
 }
 
 public void keyReleased() {
-  if(key == 'a') {
+  if(key == ' ') {
+    keys[8] = false;
+  } if(key == 'a') {
     keys[7] = false;
   } if(key == 'd') {
     keys[6] = false;
@@ -177,6 +197,5 @@ public void keyReleased() {
 }
 
 public boolean moveKeys() {return keys[4] || keys[5] || keys[6] || keys[7];}
-
 
 
