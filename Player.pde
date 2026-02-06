@@ -1,7 +1,7 @@
 public boolean[] keys = new boolean[9];
 class Player {
   float x, y, z, l, w, h, rotation, vx, vy, vz, vxs, vxc, vzs, vzc;
-  boolean jump = false, gravity = true;
+  boolean jump = false, gravity = true, sideCol = false;
   public Player(float xPos, float yPos, float zPos, float myLength, float myWidth, float myHeight) {
     x = xPos;
     y = yPos;
@@ -17,7 +17,7 @@ class Player {
     translate(x, y, z);
     rotateY(-rotation);
     box(l, h, w);
-    translate(0, 0, w+1);
+    translate(0, 0, 0);
     popMatrix();
   }
   
@@ -47,13 +47,27 @@ class Player {
     x += vx;
     y += vy;
     z += vz;
-    if(!(keys[6] || keys[7])) {vxs *= 0.9;}
-    if(!(keys[4] || keys[5])) {vxc *= 0.9;}
-    if(!(keys[4] || keys[5])) {vzs *= 0.9;}
-    if(!(keys[6] || keys[7])) {vzc *= 0.9;}
+    if(!(keys[6] || keys[7])) {
+      if(sideCol) {vxs = 0;} else {vxs *= 0.9;}
+    }
+    if(!(keys[4] || keys[5])) {
+      if(sideCol) {vxc = 0;} else {vxc *= 0.9;}
+    }
+    if(!(keys[4] || keys[5])) {
+      if(sideCol) {vzs = 0;} else {vzs *= 0.9;}
+    }
+    if(!(keys[6] || keys[7])) {
+      if(sideCol) {vzc = 0;} else {vzc *= 0.9;}
+    }
     show();
     if(vy < 4 && gravity) {vy += 0.3;}
     gravity = true;
+    sideCol = false;
+    if(y > 100) {
+      x = 0;
+      y = -25;
+      z = 0;
+    }
   }
   
   public float[][][] boundingBox() {
@@ -101,19 +115,24 @@ class Player {
   public void collision(Ground obj) {
     if(((sides(obj)[0] < 0 && sides(obj)[1] < h) || (sides(obj)[0] < 0 && sides(obj)[1] < 0)) && ((sides(obj)[2] < 0 && sides(obj)[3] < l) || (sides(obj)[2] < 0 && sides(obj)[3] < 0)) && ((sides(obj)[4] < 0 && sides(obj)[5] < w) || (sides(obj)[4] < 0 && sides(obj)[5] < 0))) {
       if(sides(obj)[0] > sides(obj)[1] && sides(obj)[0] > sides(obj)[2] && sides(obj)[0] > sides(obj)[3] && sides(obj)[0] > sides(obj)[4] && sides(obj)[0] > sides(obj)[5]) { 
+        vy = 0;
         y = obj.y+obj.h/2+h/2;
       } else if(sides(obj)[1] > sides(obj)[0] && sides(obj)[1] > sides(obj)[2] && sides(obj)[1] > sides(obj)[3] && sides(obj)[1] > sides(obj)[4] && sides(obj)[1] > sides(obj)[5]) { 
         jump = true;
         gravity = false;
+        vy = 0;
         y = obj.y-obj.h/2-h/2;
-        vy -= vy;
       } else if(sides(obj)[2] > sides(obj)[0] && sides(obj)[2] > sides(obj)[1] && sides(obj)[2] > sides(obj)[3] && sides(obj)[2] > sides(obj)[4] && sides(obj)[2] > sides(obj)[5]) { 
+        sideCol = true;
         x = obj.x+obj.l/2+l/2;
       } else if(sides(obj)[3] > sides(obj)[0] && sides(obj)[3] > sides(obj)[1] && sides(obj)[3] > sides(obj)[2] && sides(obj)[3] > sides(obj)[4] && sides(obj)[3] > sides(obj)[5]) { 
+        sideCol = true;
         x = obj.x-obj.l/2-l/2;
       } else if(sides(obj)[4] > sides(obj)[0] && sides(obj)[4] > sides(obj)[1] && sides(obj)[4] > sides(obj)[2] && sides(obj)[4] > sides(obj)[3] && sides(obj)[4] > sides(obj)[5]) { 
+        sideCol = true;
         z = obj.z+obj.w/2+w/2;
       } else if(sides(obj)[5] > sides(obj)[0] && sides(obj)[5] > sides(obj)[1] && sides(obj)[5] > sides(obj)[2] && sides(obj)[5] > sides(obj)[3] && sides(obj)[5] > sides(obj)[4]) { 
+        sideCol = true;
         z = obj.z-obj.w/2-w/2;
       }
     }
@@ -127,7 +146,7 @@ class Player {
   }*/
   
   public float[] sides(Ground obj) {
-    float[] dim = {y-h/2-(obj.y+obj.h/2), -y+h/2+(obj.y-obj.h/2), x-l/2-(obj.x+obj.l/2), -x+l/2+(obj.x-obj.l/2), z-w/2-(obj.z+obj.w/2), -z+w/2+(obj.z-obj.w/2)};
+    float[] dim = {y+vy-h/2-(obj.y+obj.h/2), -y-vy+h/2+(obj.y-obj.h/2), x+vx-l/2-(obj.x+obj.l/2), -x-vx+l/2+(obj.x-obj.l/2), z+vz-w/2-(obj.z+obj.w/2), -z-vz+w/2+(obj.z-obj.w/2)};
     return dim;
   }
   
@@ -201,4 +220,3 @@ public void keyReleased() {
 }
 
 public boolean moveKeys() {return keys[4] || keys[5] || keys[6] || keys[7];}
-
