@@ -20,29 +20,11 @@ void draw() {
   }
   moveCam();
   fill(0);
-  text(camRY, 0, -80);
+  /*text(camRY, 0, -80);
   text(me.sides(ground.get(0))[0], -100, 0, -20);
   text(me.sides(ground.get(0))[1], -20, 0, -20);
   text(me.sides(ground.get(0))[2], 60, 0, -20);
   text(me.sides(ground.get(0))[3], 140, 0, -20);
   text(me.sides(ground.get(0))[4], 220, 0, -20);
-  text(me.sides(ground.get(0))[5], 300, 0, -20);
-  pushMatrix();
-    fill(255, 0, 0);
-    translate(me.x, me.y, me.z);
-    rotateY(-me.rotation);
-    box(me.l, me.h, me.w);
-    popMatrix();
+  text(me.sides(ground.get(0))[5], 300, 0, -20);*/
 }
-
-
-
-
-
-
-
-
-
-
-
-
