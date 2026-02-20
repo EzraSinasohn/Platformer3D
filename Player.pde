@@ -1,7 +1,7 @@
-public boolean[] keys = new boolean[9];
+public boolean[] keys = new boolean[10];
 class Player {
-  float x, y, z, l, w, h, rotation, vx, vy, vz, vxs, vxc, vzs, vzc;
-  boolean jump = false, gravity = true, sideCol = false;
+  float x, y, z, l, w, h, rotation, vx, vy, vz, vxs, vxc, vzs, vzc, sprint;
+  boolean jump = false, gravity = true, sideCol = false, canDash = false;
   public Player(float xPos, float yPos, float zPos, float myLength, float myWidth, float myHeight) {
     x = xPos;
     y = yPos;
@@ -22,25 +22,26 @@ class Player {
   }
   
   public void move() {
+    if(keys[9]) {sprint = 2;} else {sprint = 1;}
     if(keys[8] && jump) {
       jump = false;
       vy = -5;
     } if(keys[4]) {
       rotation = camRX+PI;
-      vxc = cos(camRX)*1;
-      vzs = sin(camRX)*1;
+      vxc = cos(camRX)*sprint;
+      vzs = sin(camRX)*sprint;
     } if(keys[5]) {
       rotation = camRX;
-      vxc = -cos(camRX)*1;
-      vzs = -sin(camRX)*1;
+      vxc = -cos(camRX)*sprint;
+      vzs = -sin(camRX)*sprint;
     } if(keys[6]) {
       rotation = camRX+PI/2;
-      vxs = sin(camRX)*1;
-      vzc = -cos(camRX)*1;
+      vxs = sin(camRX)*sprint;
+      vzc = -cos(camRX)*sprint;
     } if(keys[7]) {
       rotation = camRX-PI/2;
-      vxs = -sin(camRX)*1;
-      vzc = cos(camRX)*1;
+      vxs = -sin(camRX)*sprint;
+      vzc = cos(camRX)*sprint;
     }
     vx = vxs + vxc;
     vz = vzs + vzc;
@@ -114,15 +115,16 @@ class Player {
   
   public void collision(Ground obj) {
     if(((sides(obj)[0] < 0 && sides(obj)[1] < h) || (sides(obj)[0] < 0 && sides(obj)[1] < 0)) && ((sides(obj)[2] < 0 && sides(obj)[3] < l) || (sides(obj)[2] < 0 && sides(obj)[3] < 0)) && ((sides(obj)[4] < 0 && sides(obj)[5] < w) || (sides(obj)[4] < 0 && sides(obj)[5] < 0))) {
-      if(sides(obj)[0] > sides(obj)[1] && sides(obj)[0] > sides(obj)[2] && sides(obj)[0] > sides(obj)[3] && sides(obj)[0] > sides(obj)[4] && sides(obj)[0] > sides(obj)[5]) { 
+      if(((y < obj.y+obj.h/2+h/2) && (y > obj.y+3*obj.h/8+3*h/8) && vy < 0)/* || (sides(obj)[0] > sides(obj)[1] && sides(obj)[0] > sides(obj)[2] && sides(obj)[0] > sides(obj)[3] && sides(obj)[0] > sides(obj)[4] && sides(obj)[0] > sides(obj)[5])*/) { 
         vy = 0;
         y = obj.y+obj.h/2+h/2;
       } else if(sides(obj)[1] > sides(obj)[0] && sides(obj)[1] > sides(obj)[2] && sides(obj)[1] > sides(obj)[3] && sides(obj)[1] > sides(obj)[4] && sides(obj)[1] > sides(obj)[5]) { 
         jump = true;
         gravity = false;
+        canDash = true;
         vy = 0;
         y = obj.y-obj.h/2-h/2;
-      } else if(sides(obj)[2] > sides(obj)[0] && sides(obj)[2] > sides(obj)[1] && sides(obj)[2] > sides(obj)[3] && sides(obj)[2] > sides(obj)[4] && sides(obj)[2] > sides(obj)[5]) { 
+      } else if(((x < obj.x+obj.l/2+l/2) && (x > obj.x+3*obj.l/8+3*l/8) && vx < 0) /*sides(obj)[2] > sides(obj)[0] && sides(obj)[2] > sides(obj)[1] && sides(obj)[2] > sides(obj)[3] && sides(obj)[2] > sides(obj)[4] && sides(obj)[2] > sides(obj)[5]*/) { 
         sideCol = true;
         x = obj.x+obj.l/2+l/2;
       } else if(sides(obj)[3] > sides(obj)[0] && sides(obj)[3] > sides(obj)[1] && sides(obj)[3] > sides(obj)[2] && sides(obj)[3] > sides(obj)[4] && sides(obj)[3] > sides(obj)[5]) { 
@@ -176,7 +178,9 @@ public void moveCam() {
 }
 
 public void keyPressed() {
-  if(key == ' ') {
+  if(key == 'r') {
+    keys[9] = true;
+  } if(key == ' ') {
     keys[8] = true;
   } if(key == 'a') {
     keys[7] = true;
@@ -198,7 +202,9 @@ public void keyPressed() {
 }
 
 public void keyReleased() {
-  if(key == ' ') {
+  if(key == 'r') {
+    keys[9] = false;
+  } if(key == ' ') {
     keys[8] = false;
   } if(key == 'a') {
     keys[7] = false;
