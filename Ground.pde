@@ -1,12 +1,14 @@
 class Ground {
   public float x, y, z, l, w, h;
-  public Ground(float xPos, float yPos, float zPos, float myLength, float myWidth, float myHeight) {
+  public boolean stair;
+  public Ground(float xPos, float yPos, float zPos, float myLength, float myHeight, float myWidth, boolean s) {
     x = xPos;
     y = yPos;
     z = zPos;
     l = myLength;
     w = myWidth;
     h = myHeight;
+    stair = s;
   }
   
   public void show() {
@@ -70,4 +72,10 @@ class Ground {
   public float[][] right() {return boundingBox()[3];}
   public float[][] front() {return boundingBox()[4];}
   public float[][] back() {return boundingBox()[5];}
+}
+
+public void stairs(float x, float y, float z, float l, float h, float w, float r) {
+  for(float i = 0; i < 10; i++) {
+    ground.add(new Ground(x-l+i*l/20, y-h+i*h/10, z, i*l/10, h/10, w, true));
+  }
 }
