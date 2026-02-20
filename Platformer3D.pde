@@ -3,8 +3,11 @@ float camX = 0, camY = 0, camZ = 100, camRX = 0, camRY = 0, camVY = 0;
 Player me = new Player(0, -25, 0, 10, 10, 20);
 void setup() {
   size(800, 800, P3D);
-  ground.add(new Ground(0, 0, 0, 25, 25, 25));
-  ground.add(new Ground(0, 17.5, 0, 100, 100, 10));
+  //ground.add(new Ground(0, -75, 0, 25, 25, 25, false));
+  ground.add(new Ground(0, 0, 0, 25, 25, 25, false));
+  ground.add(new Ground(0, 17.5, 0, 100, 10, 100, false));
+  ground.add(new Ground(-50, -30, -75, 25, 25, 25, false));
+  stairs(50-12.5, 14, 0, 25, 25, 25, 0);
   rectMode(CORNERS);
 }
 
