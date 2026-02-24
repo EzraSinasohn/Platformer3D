@@ -73,7 +73,10 @@ class Player {
       rotation = camRX-PI/2;
       vxs = -sin(camRX)*sprint;
       vzc = cos(camRX)*sprint;
-    }
+    } if(keys[4] && keys[6]) {rotation = PI-PI/4;}
+    if(keys[4] && keys[7]) {rotation = PI+PI/4;}
+    if(keys[5] && keys[6]) {rotation = PI+PI/4;}
+    if(keys[5] && keys[7]) {rotation = PI-PI/4;}
     vx = vxs + vxc;
     vz = vzs + vzc;
     x += vx;
