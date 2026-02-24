@@ -1,6 +1,6 @@
 public boolean[] keys = new boolean[10];
 class Player {
-  float x, y, z, l, w, h, rotation, vx, vy, vz, vxs, vxc, vzs, vzc, sprint;
+  float x, y, z, l, w, h, rotation, vx, vy, vz, vxs, vxc, vzs, vzc, sprint, limbR;
   boolean jump = false, gravity = true, sideCol = false, canDash = false;
   public Player(float xPos, float yPos, float zPos, float myLength, float myWidth, float myHeight) {
     x = xPos;
@@ -16,8 +16,39 @@ class Player {
     fill(255, 0, 0);
     translate(x, y, z);
     rotateY(-rotation);
-    box(l, h, w);
-    translate(0, 0, 0);
+    playerModel(l, h, w, cos(limbR));
+    popMatrix();
+  }
+  
+  public void playerModel(float len, float hei, float wid, float limb) {
+    pushMatrix();
+    fill(255, 0, 0);
+    box(len/2, hei/2, wid/2);
+    fill(255, 120, 0);
+    translate(0, -3*hei/8, 0);
+    noStroke();
+    sphere(len/4);
+    translate(0, hei/8, 3*wid/8);
+    rotateZ(limb);
+    translate(0, hei/4, 0);
+    box(len/4, hei/2, wid/4);
+    translate(0, -hei/4, 0);
+    rotateZ(-limb);
+    translate(0, 0, -3*wid/4);
+    rotateZ(-limb);
+    translate(0, hei/4, 0);
+    box(len/4, hei/2, wid/4);
+    translate(0, -hei/4, 0);
+    rotateZ(limb);
+    translate(0, 3*hei/8, wid/2);
+    rotateZ(limb);
+    translate(0, hei/4, 0);
+    fill(0, 0, 120);
+    box(len/4, hei/4, wid/4);
+    translate(0, -hei/4, 0);
+    rotateZ(-2*limb);
+    translate(0, hei/4, -wid/4);
+    box(len/4, hei/4, wid/4);
     popMatrix();
   }
   
@@ -60,6 +91,12 @@ class Player {
     if(!(keys[6] || keys[7])) {
       if(sideCol) {vzc = 0;} else {vzc *= 0.9;}
     }
+    if(keys[4] || keys[5] || keys[6] || keys[7]) {
+      limbR += sqrt(vx*vx+vz*vz)*PI/24;
+    } else {
+      limbR = PI/2;
+    }
+    if(limbR > TWO_PI) {limbR -= TWO_PI;}
     show();
     if(vy < 4 && gravity) {vy += 0.3;}
     gravity = true;
