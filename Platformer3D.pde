@@ -5,14 +5,26 @@ void setup() {
   size(800, 800, P3D);
   //ground.add(new Ground(0, -75, 0, 25, 25, 25, false));
   ground.add(new Ground(0, 0, 0, 25, 25, 25, false));
-  ground.add(new Ground(0, 17.5, 0, 100, 10, 100, false));
+  ground.add(new Ground(0, 17.5, 0, 1000, 10, 1000, false));
   ground.add(new Ground(-50, -30, -75, 25, 25, 25, false));
   stairs(50-12.5, 14, 0, 25, 25, 25, 0);
   rectMode(CORNERS);
+  lights();
 }
 
 void draw() {
   background(100, 200, 250);
+  //lights();
+  lightFalloff(1.0, 0.0, 0.0);
+  ambientLight(120, 120, 120);
+  pointLight(200, 200, 200, 140, -160, 144);
+  pushMatrix();
+  shininess(255);
+  emissive(20);
+  fill(250, 250, 100);
+  translate(140, -160, 144);
+  ellipse(0, 0, 10, 10);
+  popMatrix();
   for(int i = 0; i < ground.size(); i++) {
     ground.get(i).show();
   }
