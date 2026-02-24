@@ -12,7 +12,7 @@ class Ground {
   }
   
   public void show() {
-    fill(255);
+    fill(0, 100, 100);
     pushMatrix();
     translate(x, y, z);
     box(l, h, w);
